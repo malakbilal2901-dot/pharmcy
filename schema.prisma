@@ -1,0 +1,30 @@
+generator client {
+  provider  = "prisma-client-py"
+  interface = "sync"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  gtin        String   @unique
+  batchNumber String   @map("batch_number")
+  expiryDate  String   @map("expiry_date")
+  qty         Int      @default(0)
+  cost        Float
+  price       Float
+  vat         Float    @default(15)
+  manufacturer String?
+  supplier    String?
+  createdAt   String   @default(dbgenerated("datetime('now')")) @map("created_at")
+  updatedAt   String   @default(dbgenerated("datetime('now')")) @map("updated_at")
+
+  @@unique([name, batchNumber])
+  @@index([expiryDate], map: "idx_products_expiry")
+  @@index([name], map: "idx_products_name")
+  @@map("products")
+}
