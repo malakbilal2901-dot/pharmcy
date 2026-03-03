@@ -1,0 +1,1433 @@
+﻿﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صيدلية الدواء - متجرك الصحي الشامل</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'cairo': ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        'pharma-green': '#059669',
+                        'pharma-dark': '#064e3b',
+                        'pharma-gold': '#f59e0b',
+                        'pharma-light': '#d1fae5',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html{
+            scroll-behavior: smooth;
+        }
+        body { font-family: 'Cairo', sans-serif; }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #059669 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px -12px rgba(5, 150, 105, 0.25);
+        }
+        .scroll-hidden::-webkit-scrollbar { display: none; }
+        .hero-pattern {
+            background-image: radial-gradient(circle at 2px 2px, rgba(5, 150, 105, 0.15) 1px, transparent 0);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-effect border-b border-gray-200 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-pharma-green to-pharma-dark rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+                        <i class="fas fa-mortar-pestle"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-pharma-dark">صيدلية الدواء</h1>
+                        <p class="text-xs text-gray-500">رعاية صحية موثوقة</p>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#home" class="text-gray-700 hover:text-pharma-green font-semibold transition">الرئيسية</a>
+                    <a href="#products" class="text-gray-700 hover:text-pharma-green font-semibold transition">المنتجات</a>
+                    <a href="#reservation" class="text-gray-700 hover:text-pharma-green font-semibold transition">الحجز</a>
+                    <a href="#consultation" class="text-gray-700 hover:text-pharma-green font-semibold transition">استشارة صيدلي</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleCart()" class="relative p-3 bg-pharma-light rounded-full hover:bg-pharma-green hover:text-white transition group">
+                        <i class="fas fa-shopping-bag text-xl text-pharma-green group-hover:text-white"></i>
+                        <span id="cartCount" class="absolute -top-1 -right-1 bg-pharma-gold text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold">0</span>
+                    </button>
+
+                    <button id="account-btn" onclick="openAccountSidebar()" class="px-4 py-2 rounded-xl bg-pharma-light text-pharma-dark font-bold hover:bg-pharma-green hover:text-white transition">
+                        حسابي
+                    </button>
+                    <div id="user-profile" onclick="openAccountSidebar('login')" class="hidden items-center gap-3 cursor-pointer">
+                        <div class="w-10 h-10 rounded-full border-2 border-pharma-green bg-pharma-light text-pharma-dark flex items-center justify-center font-bold">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <p id="user-name" class="font-bold text-sm text-gray-800"></p>
+                            <p id="user-phone" class="text-xs text-gray-500" dir="ltr"></p>
+                            <button onclick="signOut()" class="text-xs text-red-500 hover:underline">تسجيل الخروج</button>
+                        </div>
+                    </div>
+
+                    <button class="md:hidden p-2 text-gray-700" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="md:hidden hidden px-6 pb-4">
+            <div class="bg-white rounded-2xl border border-gray-200 p-4 space-y-3">
+                <a href="#home" onclick="closeMobileMenu()" class="block text-gray-700 hover:text-pharma-green font-semibold transition">الرئيسية</a>
+                <a href="#products" onclick="closeMobileMenu()" class="block text-gray-700 hover:text-pharma-green font-semibold transition">المنتجات</a>
+                <a href="#consultation" onclick="closeMobileMenu()" class="block text-gray-700 hover:text-pharma-green font-semibold transition">استشارة صيدلي</a>
+                <button onclick="closeMobileMenu(); openReservationModal();" class="w-full text-right text-gray-700 hover:text-pharma-green font-semibold transition">الحجز</button>
+                <div class="pt-2 border-t border-gray-200 flex gap-2">
+                    <button onclick="closeMobileMenu(); toggleCart();" class="flex-1 py-2 rounded-xl bg-pharma-light text-pharma-dark font-bold">السلة</button>
+                    <button onclick="closeMobileMenu(); openAccountSidebar('login');" class="flex-1 py-2 rounded-xl bg-gray-100 text-gray-700 font-bold">الحساب</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center pt-20 overflow-hidden hero-pattern">
+        <div class="absolute inset-0 bg-gradient-to-br from-pharma-light/50 to-white/80"></div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-40 right-10 w-64 h-64 bg-pharma-green/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute bottom-20 left-10 w-96 h-96 bg-pharma-gold/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 2s;"></div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-right animate-slide-up">
+                    <div class="inline-block px-4 py-2 bg-pharma-green/10 text-pharma-green rounded-full text-sm font-bold mb-6 border border-pharma-green/20">
+                        <i class="fas fa-shield-alt ml-2"></i> منتجات مرخصة من وزارة الصحة
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-bold text-gray-900 leading-tight mb-6">
+                        صحتك تبدأ من <span class="gradient-text">صيدليتنا</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                        اكتشف مجموعتنا الفاخرة من الأدوية والمكملات الغذائية ومستحضرات التجميل. 
+                        احجز منتجاتك الآن واستلمها من الصيدلية بدون دفع مقدم!
+                    </p>
+                    <div class="flex gap-4 flex-wrap">
+                        <button onclick="scrollToProducts()" class="px-8 py-4 bg-gradient-to-r from-pharma-green to-pharma-dark text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition transform flex items-center gap-3">
+                            <i class="fas fa-shopping-basket"></i>
+                            تصفح المنتجات
+                        </button>
+                        <button onclick="openReservationModal()" class="px-8 py-4 bg-white text-pharma-green border-2 border-pharma-green rounded-2xl font-bold text-lg hover:bg-pharma-green hover:text-white transition flex items-center gap-3">
+                            <i class="fas fa-calendar-check"></i>
+                            احجز الآن
+                        </button>
+                    </div>
+                    
+                    <div class="mt-12 flex items-center gap-8 text-gray-600">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-pharma-green text-xl"></i>
+                            <span class="font-semibold">استلام فوري</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-pharma-green text-xl"></i>
+                            <span class="font-semibold">استشارة مجانية</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-check-circle text-pharma-green text-xl"></i>
+                            <span class="font-semibold">دفع عند الاستلام</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="relative z-10 animate-float">
+                        <img src="https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&h=800&fit=crop" alt="Pharmacy" class="rounded-3xl shadow-2xl w-full object-cover h-[600px]">
+                        
+                        <!-- Floating Cards -->
+                        <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-gray-100 animate-slide-up" style="animation-delay: 0.3s;">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                                    <i class="fas fa-prescription-bottle-alt text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">المنتجات المتوفرة</p>
+                                    <p class="text-xl font-bold text-gray-900">+5000</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="absolute -top-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-gray-100 animate-slide-up" style="animation-delay: 0.5s;">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600">
+                                    <i class="fas fa-star text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">تقييم العملاء</p>
+                                    <p class="text-xl font-bold text-gray-900">4.9/5</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center p-6 rounded-2xl bg-gradient-to-b from-pharma-light to-white border border-pharma-green/10 hover:shadow-xl transition">
+                    <div class="w-16 h-16 bg-pharma-green/10 rounded-2xl flex items-center justify-center text-pharma-green text-2xl mx-auto mb-4">
+                        <i class="fas fa-hand-holding-medical"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">حجز بدون دفع</h3>
+                    <p class="text-gray-600 text-sm">احجز منتجاتك وادفع عند الاستلام من الصيدلية</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-gradient-to-b from-blue-50 to-white border border-blue-100 hover:shadow-xl transition">
+                    <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 text-2xl mx-auto mb-4">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">استشارة صيدلي</h3>
+                    <p class="text-gray-600 text-sm">تواصل مع صيدلي متخصص للاستشارات المجانية</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-gradient-to-b from-amber-50 to-white border border-amber-100 hover:shadow-xl transition">
+                    <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 text-2xl mx-auto mb-4">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">توصيل سريع</h3>
+                    <p class="text-gray-600 text-sm">توصيل خلال 30 دقيقة للطلبات المستعجلة</p>
+                </div>
+                <div class="text-center p-6 rounded-2xl bg-gradient-to-b from-purple-50 to-white border border-purple-100 hover:shadow-xl transition">
+                    <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 text-2xl mx-auto mb-4">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2">منتجات أصلية</h3>
+                    <p class="text-gray-600 text-sm">100% ضمان أصالة على جميع المنتجات</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">منتجاتنا المميزة</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">اختر من مجموعتنا الواسعة من المنتجات الصحية المعتمدة</p>
+                
+                <!-- Categories -->
+                <div class="flex flex-wrap justify-center gap-4 mt-8">
+                    <button onclick="filterProducts('all')" class="category-btn active px-6 py-2 rounded-full bg-pharma-green text-white font-semibold transition hover:shadow-lg" data-category="all">الكل</button>
+                    <button onclick="filterProducts('medicine')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-700 font-semibold border border-gray-200 transition hover:border-pharma-green hover:text-pharma-green" data-category="medicine">أدوية</button>
+                    <button onclick="filterProducts('vitamins')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-700 font-semibold border border-gray-200 transition hover:border-pharma-green hover:text-pharma-green" data-category="vitamins">فيتامينات</button>
+                    <button onclick="filterProducts('care')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-700 font-semibold border border-gray-200 transition hover:border-pharma-green hover:text-pharma-green" data-category="care">عناية شخصية</button>
+                    <button onclick="filterProducts('devices')" class="category-btn px-6 py-2 rounded-full bg-white text-gray-700 font-semibold border border-gray-200 transition hover:border-pharma-green hover:text-pharma-green" data-category="devices">أجهزة طبية</button>
+                </div>
+            </div>
+
+            <div id="productsGrid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Products will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservation System Section -->
+    <section id="reservation" class="py-20 bg-gradient-to-br from-pharma-dark to-pharma-green text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 30px 30px;"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold mb-6">نظام الحجز الذكي</h2>
+                    <p class="text-xl text-green-100 mb-8 leading-relaxed">
+                        لا حاجة للدفع المسبق! احجز منتجاتك الآن واحصل عليها من الصيدلية في الوقت المناسب لك. 
+                        نظام آمن وسهل الاستخدام مع إمكانية الدفع عند الاستلام.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-2xl">1</div>
+                            <div>
+                                <h4 class="font-bold">اختر منتجاتك</h4>
+                                <p class="text-sm text-green-100">تصفح واختر ما تحتاجه من منتجاتنا المتنوعة</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-2xl">2</div>
+                            <div>
+                                <h4 class="font-bold">احجز بدون دفع</h4>
+                                <p class="text-sm text-green-100">أدخل بياناتك وحدد وقت الاستلام المناسب</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-sm">
+                            <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-2xl">3</div>
+                            <div>
+                                <h4 class="font-bold">استلم وادفع</h4>
+                                <p class="text-sm text-green-100">توجه للصيدلية واستلم طلبك وادفع نقداً أو بالبطاقة</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl p-8 text-gray-800 shadow-2xl">
+                    <h3 class="text-2xl font-bold mb-6 text-center text-pharma-dark">احجز منتجاتك الآن</h3>
+                    <form id="reservationForm" onsubmit="handleReservation(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">الاسم الكامل</label>
+                            <input id="reservation-name" type="text" required readonly class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-700 outline-none transition cursor-not-allowed" placeholder="يتم تعبئته من الحساب">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">رقم الهاتف</label>
+                            <input id="reservation-phone" type="tel" required readonly class="w-full px-4 py-3 rounded-xl border border-gray-300 bg-gray-50 text-gray-700 outline-none transition cursor-not-allowed" placeholder="يتم تعبئته من الحساب">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">تاريخ الاستلام</label>
+                                <input id="reservation-date" type="date" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pharma-green focus:ring-2 focus:ring-pharma-green/20 outline-none transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">وقت الاستلام</label>
+                                <select id="reservation-time" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pharma-green focus:ring-2 focus:ring-pharma-green/20 outline-none transition">
+                                    <option value="">اختر وقت الاستلام</option>
+                                    <option value="الصباح (9ص - 12م)">الصباح (9ص - 12م)</option>
+                                    <option value="المساء (4م - 10م)">المساء (4م - 10م)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input id="reservation-products-auto" type="hidden" value="">
+                        <p class="text-xs text-gray-500 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">المنتجات يتم أخذها تلقائياً من السلة عند الضغط على الحجز</p>
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-pharma-green to-pharma-dark text-white rounded-xl font-bold text-lg hover:shadow-xl hover:scale-[1.02] transition transform">
+                            <i class="fas fa-paper-plane ml-2"></i>
+                            تأكيد الحجز بدون دفع
+                        </button>
+                        <p class="text-center text-sm text-gray-500 mt-4">
+                            <i class="fas fa-lock ml-1"></i>
+                            بياناتك آمنة 100% - الدفع عند الاستلام فقط
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pharmacist Consultation -->
+    <section id="consultation" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="bg-gradient-to-r from-blue-50 to-pharma-light rounded-3xl p-8 md:p-12">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 md:order-1">
+                        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&h=600&fit=crop" alt="Pharmacist" class="rounded-2xl shadow-xl w-full">
+                    </div>
+                    <div class="order-1 md:order-2">
+                        <div class="inline-block px-4 py-2 bg-pharma-green text-white rounded-full text-sm font-bold mb-4">
+                            <i class="fas fa-headset ml-2"></i> متوفر 24/7
+                        </div>
+                        <h2 class="text-4xl font-bold text-gray-900 mb-4">استشارة الصيدلي المجانية</h2>
+                        <p class="text-gray-600 mb-8 text-lg">
+                            لديك سؤال عن دواء أو تبحث عن بديل؟ صيدليونا المتخصصون جاهزون لمساعدتك في أي وقت. 
+                            استشارة مجانية وسرية تامة.
+                        </p>
+                        
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-pharma-green text-xl"></i>
+                                <span>استشارات في الأدوية والجرعات</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-pharma-green text-xl"></i>
+                                <span>البدائل الأرخص للأدوية</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-pharma-green text-xl"></i>
+                                <span>نصائح للعناية الصحية</span>
+                            </div>
+                        </div>
+
+                        <button onclick="openChat()" class="px-8 py-4 bg-pharma-green text-white rounded-2xl font-bold text-lg hover:bg-pharma-dark transition shadow-lg hover:shadow-xl flex items-center gap-3">
+                            <i class="fas fa-comments"></i>
+                            بدء محادثة فورية
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-pharma-green rounded-xl flex items-center justify-center">
+                            <i class="fas fa-mortar-pestle"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">صيدلية الدواء</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        وجهتك الأولى للرعاية الصحية الموثوقة. نقدم منتجات أصلية واستشارات مجانية منذ 1995.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 text-pharma-gold">روابط سريعة</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">المنتجات</a></li>
+                        <li><a href="#" class="hover:text-white transition">الحجز</a></li>
+                        <li><a href="#" class="hover:text-white transition">الاستشارات</a></li>
+                        <li><a href="#" class="hover:text-white transition">عن الصيدلية</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 text-pharma-gold">تواصل معنا</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-phone ml-2"></i> 920012345</li>
+                        <li><i class="fas fa-envelope ml-2"></i> info@pharmacy.com</li>
+                        <li><i class="fas fa-map-marker-alt ml-2"></i> شارع الملك فهد، الرياض</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4 text-pharma-gold">ساعات العمل</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>السبت - الخميس: 24 ساعة</li>
+                        <li>الجمعة: 1 ظهراً - 12 منتصف الليل</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2024 صيدلية الدواء. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Account Sidebar -->
+    <div id="accountSidebar" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeAccountSidebar()"></div>
+        <div id="accountContent" class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform transition-transform duration-300 translate-x-full">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900">الحساب</h3>
+                    <button onclick="closeAccountSidebar()" class="p-2 hover:bg-gray-100 rounded-full transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <div id="account-auth-forms">
+                    <div class="flex gap-2 mb-4">
+                        <button id="auth-tab-login" onclick="switchAccountTab('login')" class="flex-1 py-2 rounded-xl bg-pharma-green text-white font-bold">تسجيل الدخول</button>
+                        <button id="auth-tab-register" onclick="switchAccountTab('register')" class="flex-1 py-2 rounded-xl bg-gray-100 text-gray-700 font-bold">إنشاء حساب</button>
+                    </div>
+
+                    <form id="login-form" class="space-y-3">
+                        <input id="login-phone" type="tel" required placeholder="رقم الهاتف" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pharma-green focus:ring-2 focus:ring-pharma-green/20 outline-none transition">
+                        <input id="login-password" type="password" required placeholder="كلمة المرور" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pharma-green focus:ring-2 focus:ring-pharma-green/20 outline-none transition">
+                        <button type="submit" class="w-full py-3 bg-pharma-green text-white rounded-xl font-bold hover:bg-pharma-dark transition">دخول</button>
+                    </form>
+
+                    <form id="register-form" class="space-y-3 hidden">
+                        <input id="register-name" type="text" required placeholder="الاسم" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pharma-green focus:ring-2 focus:ring-pharma-green/20 outline-none transition">
+                        <input id="register-phone" type="tel" required placeholder="رقم الهاتف" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pharma-green focus:ring-2 focus:ring-pharma-green/20 outline-none transition">
+                        <input id="register-password" type="password" required minlength="4" placeholder="كلمة المرور (4 أحرف أو أكثر)" class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-pharma-green focus:ring-2 focus:ring-pharma-green/20 outline-none transition">
+                        <button type="submit" class="w-full py-3 bg-pharma-green text-white rounded-xl font-bold hover:bg-pharma-dark transition">إنشاء الحساب</button>
+                    </form>
+                </div>
+
+                <div id="account-summary" class="hidden">
+                    <h4 class="font-bold text-gray-900 mb-3">بيانات الحساب</h4>
+                    <ul id="account-info-list" class="space-y-2 mb-4"></ul>
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="font-bold text-gray-900">طلباتي</h4>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openMyOrdersForm()" class="text-xs px-3 py-1 rounded-lg bg-pharma-green text-white font-bold hover:bg-pharma-dark transition">طلباتي</button>
+                            <button onclick="trackMyOrders()" class="text-xs px-3 py-1 rounded-lg bg-pharma-light text-pharma-dark font-bold hover:bg-pharma-green hover:text-white transition">تحديث</button>
+                        </div>
+                    </div>
+                    <div id="account-orders-results" class="space-y-2 max-h-64 overflow-y-auto mb-4"></div>
+                    <button onclick="signOut()" class="w-full py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">تسجيل الخروج</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="my-orders-modal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeMyOrdersForm()"></div>
+        <div class="relative z-10 w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-6 max-h-[85vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-2xl font-bold text-gray-900">فورم طلباتي</h3>
+                <button onclick="closeMyOrdersForm()" class="p-2 hover:bg-gray-100 rounded-full transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="my-orders-form-body" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="toggleCart()"></div>
+        <div class="absolute left-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform transition-transform duration-300 translate-x-full" id="cartContent">
+            <div class="p-6 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900">سلة الحجز</h3>
+                    <button onclick="toggleCart()" class="p-2 hover:bg-gray-100 rounded-full transition">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div id="cartItems" class="flex-1 overflow-y-auto space-y-4">
+                    <div class="text-center text-gray-500 mt-12">
+                        <i class="fas fa-shopping-basket text-6xl mb-4 text-gray-300"></i>
+                        <p>السلة فارغة</p>
+                    </div>
+                </div>
+
+                <div class="border-t pt-4 mt-4">
+                    <div class="flex justify-between mb-4 text-lg font-bold">
+                        <span>الإجمالي:</span>
+                        <span id="cartTotal">0 ريال</span>
+                    </div>
+                    <button onclick="openReservationModal()" class="w-full py-4 bg-pharma-green text-white rounded-xl font-bold hover:bg-pharma-dark transition">
+                        إتمام الحجز بدون دفع
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeProductModal()"></div>
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative z-10 animate-slide-up">
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition z-10">
+                <i class="fas fa-times"></i>
+            </button>
+            <div id="modalContent">
+                <!-- Content inserted by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-gray-900 text-white px-6 py-4 rounded-2xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3">
+        <i class="fas fa-check-circle text-green-400 text-xl"></i>
+        <span id="toastMessage">تمت الإضافة بنجاح!</span>
+    </div>
+
+    <!-- User Chat Widget -->
+    <div id="user-chat-widget" class="fixed bottom-4 left-4 z-50 w-[380px] max-w-[95vw] bg-white border border-gray-200 rounded-3xl shadow-2xl hidden overflow-hidden">
+        <div class="flex items-center justify-between p-3 border-b border-emerald-700 bg-gradient-to-r from-pharma-green to-pharma-dark text-white">
+            <h4 class="font-bold text-sm flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-300 animate-pulse"></span> محادثة مع الصيدلي</h4>
+            <button onclick="closeUserChat()" class="text-white/80 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-3 space-y-3">
+            <div id="user-chat-status" class="text-xs font-semibold text-amber-700 bg-amber-50 p-2 rounded-lg">بانتظار بدء المحادثة</div>
+            <div id="user-chat-messages" class="h-64 overflow-y-auto bg-gray-50 rounded-2xl p-3 space-y-2 border border-gray-100"></div>
+            <div class="flex gap-2">
+                <input id="user-chat-input" type="text" class="flex-1 px-3 py-2 border border-gray-300 rounded-xl focus:border-pharma-green focus:ring-2 focus:ring-pharma-green/20 outline-none" placeholder="اكتب رسالتك..." disabled>
+                <button id="user-chat-send" onclick="sendUserChatMessage()" class="px-3 py-2 bg-pharma-green text-white rounded-lg hover:bg-pharma-dark transition disabled:opacity-50" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let products = [];
+        let cart = [];
+        let currentCategory = 'all';
+        let activeUserChatId = null;
+        let userChatPollHandle = null;
+
+        // =================================
+        // UTILITY FUNCTIONS
+        // =================================
+
+        function isUserLoggedIn() {
+            return localStorage.getItem('pharma_current_user') !== null;
+        }
+
+        function readJson(key, fallback = []) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch {
+                return fallback;
+            }
+        }
+
+        function escapeHtml(text) {
+            return String(text || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function getCategoryName(cat) {
+            const names = {
+                medicine: 'أدوية',
+                cosmetic: 'تجميل',
+                supplement: 'مكملات',
+                equipment: 'أجهزة طبية',
+                baby: 'أطفال',
+                herbal: 'أعشاب'
+            };
+            return names[cat] || (cat || 'عام');
+        }
+
+        function normalizePhone(phone) {
+            const digits = String(phone || '').replace(/\D/g, '');
+            if (digits.startsWith('00')) return digits.slice(2);
+            if (digits.startsWith('0')) return '966' + digits.slice(1);
+            if (digits.startsWith('966')) return digits;
+            return digits;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = toast.querySelector('i');
+
+            toastMessage.textContent = message;
+
+            if (type === 'error') {
+                toast.classList.remove('bg-gray-900');
+                toast.classList.add('bg-red-600');
+                toastIcon.className = 'fas fa-exclamation-circle text-white text-xl';
+            } else {
+                toast.classList.remove('bg-red-600');
+                toast.classList.add('bg-gray-900');
+                toastIcon.className = 'fas fa-check-circle text-green-400 text-xl';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // =================================
+        // LOCAL AUTH
+        // =================================
+
+        const AUTH_USERS_KEY = 'pharma_web_users';
+        const AUTH_CURRENT_USER_KEY = 'pharma_current_user';
+
+        function getStoredUsers() {
+            return readJson(AUTH_USERS_KEY, []);
+        }
+
+        function saveStoredUsers(users) {
+            localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(users));
+        }
+
+        function generateUniqueCustomerCode(existingUsers) {
+            let code = '';
+            do {
+                code = String(Math.floor(1000000 + Math.random() * 9000000));
+            } while (existingUsers.some(u => String(u.customerCode || '') === code));
+            return code;
+        }
+
+        function getCurrentUser() {
+            try {
+                const raw = localStorage.getItem(AUTH_CURRENT_USER_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch {
+                return null;
+            }
+        }
+
+        function syncCurrentUserCode() {
+            const current = getCurrentUser();
+            if (!current) return null;
+            if (current.customerCode) return current;
+            const users = getStoredUsers();
+            const match = users.find(u => u.id === current.id || u.phoneNorm === current.phoneNorm);
+            if (!match) return current;
+            if (!match.customerCode) {
+                match.customerCode = generateUniqueCustomerCode(users);
+                saveStoredUsers(users);
+            }
+            const updated = {
+                id: match.id,
+                name: match.name,
+                phone: match.phone,
+                phoneNorm: match.phoneNorm,
+                customerCode: match.customerCode
+            };
+            localStorage.setItem(AUTH_CURRENT_USER_KEY, JSON.stringify(updated));
+            return updated;
+        }
+
+        function requireUserAuth(actionLabel = 'المتابعة') {
+            if (isUserLoggedIn()) return true;
+            showToast(`لازم تسجل حساب قبل ${actionLabel}`, 'error');
+            openAccountSidebar('login');
+            return false;
+        }
+
+        function openAccountSidebar(tab = 'login') {
+            const sidebar = document.getElementById('accountSidebar');
+            const content = document.getElementById('accountContent');
+            if (!sidebar || !content) return;
+            sidebar.classList.remove('hidden');
+            setTimeout(() => content.classList.remove('translate-x-full'), 10);
+            switchAccountTab(tab);
+            renderAccountSummary();
+        }
+
+        function closeAccountSidebar() {
+            const sidebar = document.getElementById('accountSidebar');
+            const content = document.getElementById('accountContent');
+            if (!sidebar || !content) return;
+            content.classList.add('translate-x-full');
+            setTimeout(() => sidebar.classList.add('hidden'), 300);
+        }
+
+        function switchAccountTab(tab) {
+            const isLogged = isUserLoggedIn();
+            const authForms = document.getElementById('account-auth-forms');
+            const summary = document.getElementById('account-summary');
+            const loginTabBtn = document.getElementById('auth-tab-login');
+            const registerTabBtn = document.getElementById('auth-tab-register');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            if (!authForms || !summary || !loginTabBtn || !registerTabBtn || !loginForm || !registerForm) return;
+
+            authForms.classList.toggle('hidden', isLogged);
+            summary.classList.toggle('hidden', !isLogged);
+            if (isLogged) return;
+
+            const isLogin = tab !== 'register';
+            loginForm.classList.toggle('hidden', !isLogin);
+            registerForm.classList.toggle('hidden', isLogin);
+            if (isLogin) {
+                loginTabBtn.className = 'flex-1 py-2 rounded-xl bg-pharma-green text-white font-bold';
+                registerTabBtn.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-700 font-bold';
+            } else {
+                registerTabBtn.className = 'flex-1 py-2 rounded-xl bg-pharma-green text-white font-bold';
+                loginTabBtn.className = 'flex-1 py-2 rounded-xl bg-gray-100 text-gray-700 font-bold';
+            }
+        }
+
+        function renderAccountSummary() {
+            const list = document.getElementById('account-info-list');
+            const user = getCurrentUser();
+            if (!list || !user) return;
+            list.innerHTML = `
+                <li class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                    <p class="text-xs text-emerald-700 mb-1">كود العميل</p>
+                    <p class="font-black text-emerald-700 text-lg tracking-widest" dir="ltr">${escapeHtml(user.customerCode || 'غير متاح')}</p>
+                </li>
+                <li class="p-3 rounded-xl bg-gray-50 border border-gray-200">
+                    <p class="text-xs text-gray-500 mb-1">الاسم</p>
+                    <p class="font-bold text-gray-900">${escapeHtml(user.name || '')}</p>
+                </li>
+                <li class="p-3 rounded-xl bg-gray-50 border border-gray-200">
+                    <p class="text-xs text-gray-500 mb-1">رقم الهاتف</p>
+                    <p class="font-bold text-gray-900" dir="ltr">${escapeHtml(user.phone || '')}</p>
+                </li>
+            `;
+            trackMyOrders();
+        }
+
+        function syncReservationAutoFields() {
+            const form = document.getElementById('reservationForm');
+            if (!form) return;
+            const user = getCurrentUser();
+            const nameInput = document.getElementById('reservation-name');
+            const phoneInput = document.getElementById('reservation-phone');
+            const dateInput = document.getElementById('reservation-date');
+            const productsInput = document.getElementById('reservation-products-auto');
+
+            if (user) {
+                if (nameInput) nameInput.value = user.name || '';
+                if (phoneInput) phoneInput.value = user.phone || '';
+            }
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.min = today;
+            }
+            if (productsInput) {
+                const cartDetails = cart.map(i => `${i.name} x${i.quantity}`).join('، ');
+                productsInput.value = cartDetails;
+            }
+        }
+
+        function updateUIAfterLogin(user) {
+            if (!user) return;
+            document.getElementById('account-btn')?.classList.add('hidden');
+            const profileDiv = document.getElementById('user-profile');
+            if (profileDiv) {
+                profileDiv.classList.remove('hidden');
+                profileDiv.classList.add('flex');
+                document.getElementById('user-name').textContent = user.name || '';
+                document.getElementById('user-phone').textContent = user.phone || '';
+            }
+            const reservationForm = document.getElementById('reservationForm');
+            if (reservationForm) {
+                const nameInput = document.getElementById('reservation-name');
+                const phoneInput = document.getElementById('reservation-phone');
+                if (nameInput) nameInput.value = user.name;
+                if (phoneInput) phoneInput.value = user.phone || '';
+            }
+            syncReservationAutoFields();
+            switchAccountTab('login');
+            renderAccountSummary();
+        }
+
+        function signOut() {
+            localStorage.removeItem(AUTH_CURRENT_USER_KEY);
+            document.getElementById('account-btn')?.classList.remove('hidden');
+            const profileDiv = document.getElementById('user-profile');
+            if (profileDiv) {
+                profileDiv.classList.add('hidden');
+                profileDiv.classList.remove('flex');
+            }
+            switchAccountTab('login');
+            showToast('تم تسجيل الخروج بنجاح');
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = (document.getElementById('register-name')?.value || '').trim();
+            const phone = (document.getElementById('register-phone')?.value || '').trim();
+            const password = (document.getElementById('register-password')?.value || '').trim();
+            const phoneNorm = normalizePhone(phone);
+            if (!name || !phoneNorm || !password) {
+                showToast('املأ الاسم والرقم وكلمة المرور', 'error');
+                return;
+            }
+            if (password.length < 4) {
+                showToast('كلمة المرور لازم تكون 4 أحرف على الأقل', 'error');
+                return;
+            }
+            const users = getStoredUsers();
+            if (users.some(u => u.phoneNorm === phoneNorm)) {
+                showToast('الرقم مسجل بالفعل، سجل دخولك', 'error');
+                switchAccountTab('login');
+                return;
+            }
+            const customerCode = generateUniqueCustomerCode(users);
+            const newUser = {
+                id: Date.now(),
+                name,
+                phone,
+                phoneNorm,
+                customerCode,
+                password,
+                createdAt: new Date().toISOString()
+            };
+            users.push(newUser);
+            saveStoredUsers(users);
+            const sessionUser = {
+                id: newUser.id,
+                name: newUser.name,
+                phone: newUser.phone,
+                phoneNorm: newUser.phoneNorm,
+                customerCode: newUser.customerCode
+            };
+            localStorage.setItem(AUTH_CURRENT_USER_KEY, JSON.stringify(sessionUser));
+            updateUIAfterLogin(sessionUser);
+            showToast(`تم إنشاء الحساب. كودك: ${customerCode}`);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const phone = (document.getElementById('login-phone')?.value || '').trim();
+            const password = (document.getElementById('login-password')?.value || '').trim();
+            const phoneNorm = normalizePhone(phone);
+            const users = getStoredUsers();
+            const user = users.find(u => u.phoneNorm === phoneNorm && u.password === password);
+            if (!user) {
+                showToast('رقم الهاتف أو كلمة المرور غير صحيحة', 'error');
+                return;
+            }
+            if (!user.customerCode) {
+                user.customerCode = generateUniqueCustomerCode(users);
+                saveStoredUsers(users);
+            }
+            const sessionUser = {
+                id: user.id,
+                name: user.name,
+                phone: user.phone,
+                phoneNorm: user.phoneNorm,
+                customerCode: user.customerCode
+            };
+            localStorage.setItem(AUTH_CURRENT_USER_KEY, JSON.stringify(sessionUser));
+            updateUIAfterLogin(sessionUser);
+            showToast(`مرحباً ${user.name}`);
+        }
+
+        // =================================
+        // APP LOGIC
+        // =================================
+
+        function loadProductsFromSystem() {
+            const inventory = readJson('pharma_products', []);
+            products = inventory.filter(p => Number(p.stock || 0) > 0).map(p => ({
+                id: p.id,
+                name: p.name || 'بدون اسم',
+                description: p.description || 'لا يوجد وصف',
+                category: p.category || 'general',
+                stock: Number(p.stock || 0),
+                price: Number(p.price || 0),
+                image: p.image || 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=400&h=400&fit=crop'
+            }));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProductsFromSystem();
+            renderProducts();
+            updateCartUI();
+
+            const currentUser = syncCurrentUserCode();
+            if (currentUser) updateUIAfterLogin(currentUser);
+            switchAccountTab('login');
+
+            const registerForm = document.getElementById('register-form');
+            if (registerForm) registerForm.addEventListener('submit', handleRegister);
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) loginForm.addEventListener('submit', handleLogin);
+
+            window.addEventListener('scroll', () => {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-md');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                }
+            });
+            const chatInput = document.getElementById('user-chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        sendUserChatMessage();
+                    }
+                });
+            }
+        });
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            const categoryMap = {
+                vitamins: ['supplement'],
+                care: ['cosmetic'],
+                devices: ['equipment'],
+                medicine: ['medicine']
+            };
+            const allowed = categoryMap[currentCategory] || [currentCategory];
+            const filtered = currentCategory === 'all' ? products : products.filter(p => allowed.includes(p.category));
+            if (!filtered.length) {
+                grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10">لا توجد منتجات متوفرة حالياً في المخزون</div>';
+                return;
+            }
+            grid.innerHTML = filtered.map(product => `
+                <div class="product-card bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100 transition-all duration-300 group">
+                <div class="p-6">
+                    <h3 class="font-bold text-lg mb-3 text-gray-900">${escapeHtml(product.name)}</h3>
+                    <p class="text-gray-600 text-sm mb-6 leading-relaxed">${escapeHtml(product.description)}</p>
+                    <p class="text-pharma-green font-bold text-base mb-4">${(product.price||0).toFixed(2)} ريال</p>
+                    <button onclick="addToCart(${product.id})" class="px-4 py-2 bg-pharma-light text-pharma-green rounded-xl font-semibold hover:bg-pharma-green hover:text-white transition flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    احجز
+                    </button>
+                </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if (btn.dataset.category === category) {
+                    btn.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                    btn.classList.add('bg-pharma-green', 'text-white', 'border-pharma-green');
+                } else {
+                    btn.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                    btn.classList.remove('bg-pharma-green', 'text-white', 'border-pharma-green');
+                }
+            });
+            renderProducts();
+        }
+
+        function addToCart(productId) {
+            if (!requireUserAuth('إضافة منتجات للسلة')) return;
+            const product = products.find(p => p.id === productId);
+            if (!product) {
+                showToast('المنتج غير متوفر حالياً', 'error');
+                return;
+            }
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product,
+                    quantity: 1
+                });
+            }
+            updateCartUI();
+            showToast(`تم إضافة ${product.name} إلى سلة الحجز`);
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="text-center text-gray-500 mt-12"><i class="fas fa-shopping-basket text-6xl mb-4 text-gray-300"></i><p>السلة فارغة</p></div>';
+                cartTotal.textContent = '0 منتج';
+                return;
+            }
+            cartItems.innerHTML = cart.map(item => `
+                <div class="flex gap-4 bg-gray-50 p-4 rounded-xl">
+                <div class="flex-1">
+                    <h4 class="font-bold text-sm mb-1">${escapeHtml(item.name)}</h4>
+                    <p class="text-gray-500 text-xs mb-2">${escapeHtml(item.description)}</p>
+                    <div class="flex items-center gap-2 mt-2">
+                    <button onclick="updateQuantity(${item.id}, -1)" class="w-6 h-6 bg-white rounded border border-gray-300 flex items-center justify-center hover:border-pharma-green">-</button>
+                    <span class="text-sm font-semibold">${item.quantity}</span>
+                    <button onclick="updateQuantity(${item.id}, 1)" class="w-6 h-6 bg-white rounded border border-gray-300 flex items-center justify-center hover:border-pharma-green">+</button>
+                    </div>
+                </div>
+                <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+            cartTotal.textContent = `${count} منتج`;
+            syncReservationAutoFields();
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (!item) return;
+            item.quantity += change;
+            if (item.quantity <= 0) {
+                removeFromCart(productId);
+            } else {
+                updateCartUI();
+            }
+        }
+
+        function toggleCart() {
+            if (!requireUserAuth('عرض السلة')) return;
+            const sidebar = document.getElementById('cartSidebar');
+            const content = document.getElementById('cartContent');
+            if (sidebar.classList.contains('hidden')) {
+                sidebar.classList.remove('hidden');
+                setTimeout(() => content.classList.remove('translate-x-full'), 10);
+            } else {
+                content.classList.add('translate-x-full');
+                setTimeout(() => sidebar.classList.add('hidden'), 300);
+            }
+        }
+
+        function showProductDetails(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            const modal = document.getElementById('productModal');
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `<div class="p-8"><span class="text-pharma-green font-semibold text-sm">${escapeHtml(getCategoryName(product.category))}</span><h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">${escapeHtml(product.name)}</h2><p class="text-gray-600 mb-6 leading-relaxed">${escapeHtml(product.description)}</p><p class="text-pharma-green font-black text-xl mb-6">${(product.price||0).toFixed(2)} ريال</p><button onclick="addToCart(${product.id}); closeProductModal();" class="w-full py-4 bg-pharma-green text-white rounded-xl font-bold text-lg hover:bg-pharma-dark transition shadow-lg hover:shadow-xl"><i class="fas fa-shopping-bag ml-2"></i>أضف إلى سلة الحجز</button></div>`;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('productModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function handleReservation(e) {
+            e.preventDefault();
+            if (!requireUserAuth('إتمام الحجز')) return;
+
+            const form = document.getElementById('reservationForm');
+            const textInput = document.getElementById('reservation-name');
+            const phoneInput = document.getElementById('reservation-phone');
+            const dateInput = document.getElementById('reservation-date');
+            const timeSelect = document.getElementById('reservation-time');
+            const productsInput = document.getElementById('reservation-products-auto');
+            const customerName = (textInput?.value || '').trim();
+            const phone = (phoneInput?.value || '').trim();
+            const pickupDate = (dateInput?.value || '').trim();
+            const pickupTime = (timeSelect?.value || '').trim();
+            const cartProductsText = (productsInput?.value || '').trim();
+            if (!customerName || !phone) {
+                showToast('من فضلك أدخل الاسم ورقم الهاتف', 'error');
+                return;
+            }
+            if (!pickupDate) {
+                showToast('حدد تاريخ الاستلام أولاً', 'error');
+                return;
+            }
+            if (!pickupTime) {
+                showToast('حدد وقت الاستلام أولاً', 'error');
+                return;
+            }
+            if (!cart.length) {
+                showToast('السلة فارغة، أضف منتجات أولاً', 'error');
+                return;
+            }
+
+            const inventory = readJson('pharma_products', []);
+            const requiredItems = cart.map(i => ({
+                id: i.id,
+                name: i.name,
+                qty: i.quantity,
+                price: i.price || 0
+            }));
+
+            for (const req of requiredItems) {
+                const product = inventory.find(p => p.id === req.id);
+                if (!product) {
+                    showToast(`المنتج غير موجود بالمخزون: ${req.name}`, 'error');
+                    return;
+                }
+                if (Number(product.stock || 0) < req.qty) {
+                    showToast(`الكمية غير كافية للمنتج: ${req.name}`, 'error');
+                    return;
+                }
+            }
+
+            for (const req of requiredItems) {
+                const product = inventory.find(p => p.id === req.id);
+                product.stock = Number(product.stock || 0) - req.qty;
+                if (Array.isArray(product.batches) && product.batches.length) {
+                    let remaining = req.qty;
+                    product.batches.sort((a, b) => new Date(a.expiry) - new Date(b.expiry));
+                    for (let i = 0; i < product.batches.length && remaining > 0; i++) {
+                        const b = product.batches[i];
+                        const deduct = Math.min(remaining, Number(b.quantity || 0));
+                        b.quantity = Number(b.quantity || 0) - deduct;
+                        remaining -= deduct;
+                    }
+                }
+            }
+            localStorage.setItem('pharma_products', JSON.stringify(inventory));
+
+            const details = [cartProductsText ? `المنتجات: ${cartProductsText}` : '', pickupDate ? `تاريخ الاستلام: ${pickupDate}` : '', pickupTime ? `وقت الاستلام: ${pickupTime}` : ''].filter(Boolean).join(' | ');
+            const orders = readJson('pharma_orders', []);
+            const user = getCurrentUser();
+
+            orders.push({
+                id: Date.now(),
+                customerName,
+                phone,
+                details: details || 'طلب من واجهة الموقع',
+                priority: 'normal',
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+                createdBy: 'Website',
+                stockReserved: true,
+                reservedItems: requiredItems,
+                userPhone: user ? user.phone : ''
+            });
+            localStorage.setItem('pharma_orders', JSON.stringify(orders));
+            loadProductsFromSystem();
+            renderProducts();
+            cart = [];
+            updateCartUI();
+            form.reset();
+            if (dateInput) dateInput.value = '';
+            syncReservationAutoFields();
+            showToast('تم تأكيد الطلب وخصم الكمية من المخزون');
+        }
+
+        function getMyOrdersData() {
+            const user = getCurrentUser();
+            const phoneNorm = normalizePhone(user?.phone || '');
+            if (!phoneNorm) return { ok: false, reason: 'no-phone', items: [] };
+
+            const liveOrders = readJson('pharma_orders', [])
+                .filter(o => normalizePhone(o.phone) === phoneNorm)
+                .map(o => ({
+                    id: o.id,
+                    details: o.details,
+                    status: o.status || 'pending',
+                    date: o.createdAt || new Date().toISOString(),
+                    receivedAt: null
+                }));
+
+            const historyOrders = readJson('pharma_order_history', [])
+                .filter(o => normalizePhone(o.phone) === phoneNorm)
+                .map(o => ({
+                    id: o.id,
+                    details: o.details,
+                    status: o.status || 'received',
+                    date: o.createdAt || o.receivedAt || new Date().toISOString(),
+                    receivedAt: o.receivedAt || null
+                }));
+
+            const all = [...liveOrders, ...historyOrders].sort((a, b) => new Date(b.date) - new Date(a.date));
+            return { ok: true, reason: null, items: all };
+        }
+
+        function renderOrdersInContainer(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const statusText = {
+                pending: 'جديد',
+                in_progress: 'جاري التجهيز',
+                done: 'جاهز للاستلام',
+                cancelled: 'ملغي',
+                received: 'تم الاستلام'
+            };
+            const statusClass = {
+                pending: 'bg-amber-100 text-amber-700',
+                in_progress: 'bg-blue-100 text-blue-700',
+                done: 'bg-emerald-100 text-emerald-700',
+                cancelled: 'bg-slate-100 text-slate-700',
+                received: 'bg-green-100 text-green-700'
+            };
+
+            const result = getMyOrdersData();
+            if (!result.ok) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-4">لا يوجد رقم حساب لعرض الطلبات</div>';
+                return;
+            }
+
+            if (!result.items.length) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-4">لا يوجد طلبات حالياً</div>';
+                return;
+            }
+
+            container.innerHTML = result.items.map(item => `
+                <div class="p-3 bg-gray-50 rounded-xl border border-gray-200">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <p class="font-bold text-gray-900">طلب #${item.id}</p>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold ${statusClass[item.status]||'bg-slate-100 text-slate-700'}">${statusText[item.status]||item.status}</span>
+                </div>
+                <p class="text-sm text-gray-600 mb-2">${escapeHtml(item.details||'')}</p>
+                <p class="text-xs text-gray-500">تاريخ الطلب: ${new Date(item.date).toLocaleString('ar-SA')}</p>
+                ${item.receivedAt?`<p class="text-xs text-green-700 mt-1">تم الاستلام: ${new Date(item.receivedAt).toLocaleString('ar-SA')}</p>`:''}
+                </div>
+            `).join('');
+        }
+
+        function trackMyOrders() {
+            if (!requireUserAuth('عرض الطلبات')) return;
+            renderOrdersInContainer('account-orders-results');
+        }
+
+        function openMyOrdersForm() {
+            if (!requireUserAuth('عرض الطلبات')) return;
+            const modal = document.getElementById('my-orders-modal');
+            if (!modal) return;
+            renderOrdersInContainer('my-orders-form-body');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeMyOrdersForm() {
+            const modal = document.getElementById('my-orders-modal');
+            if (!modal) return;
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openReservationModal() {
+            if (!requireUserAuth('الدخول لنموذج الحجز')) return;
+            syncReservationAutoFields();
+            document.getElementById('reservation').scrollIntoView({
+                behavior: 'smooth'
+            });
+            const sidebar = document.getElementById('cartSidebar');
+            if (!sidebar.classList.contains('hidden')) {
+                toggleCart();
+            }
+        }
+
+        function getUserChatRequests() {
+            return readJson('pharma_chat_requests', []);
+        }
+
+        function saveUserChatRequests(items) {
+            localStorage.setItem('pharma_chat_requests', JSON.stringify(items));
+        }
+
+        function getChatMessagesMap() {
+            return readJson('pharma_chat_messages', {});
+        }
+
+        function saveChatMessagesMap(map) {
+            localStorage.setItem('pharma_chat_messages', JSON.stringify(map));
+        }
+
+        function renderUserChatMessages() {
+            const container = document.getElementById('user-chat-messages');
+            const map = getChatMessagesMap();
+            const msgs = map[String(activeUserChatId)] || [];
+            if (!msgs.length) {
+                container.innerHTML = '<p class="text-xs text-gray-400 text-center py-6">لا توجد رسائل بعد</p>';
+                return;
+            }
+            container.innerHTML = msgs.map(m => `<div class="${m.from==='customer'?'text-right':'text-left'}"><div class="inline-block max-w-[85%] px-3 py-2 rounded-2xl text-xs ${m.from==='customer'?'bg-gradient-to-r from-pharma-green to-pharma-dark text-white':'bg-white text-gray-800 border border-gray-200'}"><p>${escapeHtml(m.text||'')}</p><p class="text-[10px] mt-1 ${m.from==='customer'?'text-emerald-100':'text-gray-400'}">${new Date(m.createdAt||Date.now()).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit'})}</p></div></div>`).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function updateUserChatState() {
+            if (!activeUserChatId) return;
+            const requests = getUserChatRequests();
+            const req = requests.find(r => r.id === activeUserChatId);
+            if (!req) return;
+            const status = document.getElementById('user-chat-status');
+            const input = document.getElementById('user-chat-input');
+            const sendBtn = document.getElementById('user-chat-send');
+            if (req.status === 'accepted') {
+                status.className = 'text-xs font-semibold text-emerald-700 bg-emerald-50 p-2 rounded-lg';
+                status.textContent = 'تم قبول الدردشة. يمكنك المراسلة الآن.';
+                input.disabled = false;
+                sendBtn.disabled = false;
+            } else if (req.status === 'cancelled_by_pharmacist') {
+                status.className = 'text-xs font-semibold text-red-700 bg-red-50 p-2 rounded-lg';
+                status.textContent = 'تم إنهاء المحادثة من الصيدلي';
+                input.disabled = true;
+                sendBtn.disabled = true;
+            } else if (req.status === 'rejected') {
+                status.className = 'text-xs font-semibold text-red-700 bg-red-50 p-2 rounded-lg';
+                status.textContent = 'تم رفض الدردشة';
+                input.disabled = true;
+                sendBtn.disabled = true;
+            } else {
+                status.className = 'text-xs font-semibold text-amber-700 bg-amber-50 p-2 rounded-lg';
+                status.textContent = 'تم إرسال طلب الدردشة، بانتظار موافقة الصيدلي...';
+                input.disabled = true;
+                sendBtn.disabled = true;
+            }
+            renderUserChatMessages();
+        }
+
+        function startUserChatPolling() {
+            if (userChatPollHandle) clearInterval(userChatPollHandle);
+            userChatPollHandle = setInterval(updateUserChatState, 2000);
+        }
+
+        function openChat() {
+            if (!requireUserAuth('بدء الدردشة')) return;
+
+            const user = getCurrentUser();
+            const name = user.name;
+            const phone = user.phone || (document.getElementById('reservation-phone')?.value || '').trim();
+            if (!phone) {
+                showToast('يجب إدخال رقم الهاتف لبدء الدردشة', 'error');
+                return;
+            }
+
+            const widget = document.getElementById('user-chat-widget');
+            widget.classList.remove('hidden');
+
+            const requests = getUserChatRequests();
+            const existing = [...requests].reverse().find(r => normalizePhone(r.phone) === normalizePhone(phone) && ['pending', 'accepted'].includes(r.status));
+            if (existing) {
+                activeUserChatId = existing.id;
+                updateUserChatState();
+                startUserChatPolling();
+                return;
+            }
+
+            const req = {
+                id: Date.now(),
+                customerName: name,
+                phone: phone,
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+                createdBy: 'Website'
+            };
+            requests.push(req);
+            saveUserChatRequests(requests);
+            activeUserChatId = req.id;
+            updateUserChatState();
+            startUserChatPolling();
+            showToast('تم إرسال طلب الدردشة للصيدلي');
+        }
+
+        function sendUserChatMessage() {
+            const input = document.getElementById('user-chat-input');
+            const text = (input.value || '').trim();
+            if (!text || !activeUserChatId) return;
+            const map = getChatMessagesMap();
+            const key = String(activeUserChatId);
+            if (!Array.isArray(map[key])) map[key] = [];
+            map[key].push({
+                from: 'customer',
+                text,
+                createdAt: new Date().toISOString()
+            });
+            saveChatMessagesMap(map);
+            input.value = '';
+            renderUserChatMessages();
+        }
+
+        function closeUserChat() {
+            const widget = document.getElementById('user-chat-widget');
+            widget.classList.add('hidden');
+            if (userChatPollHandle) {
+                clearInterval(userChatPollHandle);
+                userChatPollHandle = null;
+            }
+        }
+
+        function scrollToProducts() {
+            document.getElementById('products').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (!menu) return;
+            menu.classList.toggle('hidden');
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (!menu) return;
+            menu.classList.add('hidden');
+        }
+</script>
+</body>
+</html>
